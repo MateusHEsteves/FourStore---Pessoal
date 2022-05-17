@@ -11,6 +11,7 @@ public class Principal {
 			
 //			MainMenu menu = new MainMenu();
 //			menu.mainMenu();
+// Atualizar métodos.
 		
 		PaymentMethod method = null;
 		method = PaymentMethod.DEBIT;
