@@ -43,7 +43,7 @@ public class MainMenu {
 				MainMenu.cadastrarProduto(); //cadProduct
 				break;
 			case 2:
-				MainMenu.listrarProdutos(); //listProduct (quant)
+				MainMenu.listarProdutos(); //listProduct (quant)
 				break;
 			case 3:
 				MainMenu.comprarProduto(); //selectProduct ou buyProduct
@@ -70,6 +70,9 @@ public class MainMenu {
 		System.out.println("Cadastro de Produto");	
 		System.out.println("====================");
 		
+		//DEBUGAR = No teste de mesa, só consigo separar as strings por underline, se usar espaço quebra.
+		
+		while (sc != null) {
 		System.out.println("Informe o nome do produto: ");
 		String nome = MainMenu.sc.next();
 		
@@ -98,25 +101,58 @@ public class MainMenu {
 		System.out.println("O produto " + produto.getNome() + " foi cadastrado com sucesso!");
 		Utils.pausar(2);
 		MainMenu.menu();
-
+			
+		} 
+		
+		sc.close();
+		
+		
 	}
 	
-	private static void listrarProdutos() {
-		System.out.println("Listando produto...");		
+	private static void listarProdutos() {
+		//System.out.println("Listando produto...");
+		if(MainMenu.produtos.size() > 0) {
+			System.out.println("Listagem de produtos: ");
+			System.out.println();
+			
+			for(Produto p : MainMenu.produtos) {
+				System.out.println(p);
+				System.out.println();
+			}
+		} else {
+			System.out.println("Ainda não há produtos cadastrados.");
+		}
+		
+		Utils.pausar(2);
+		MainMenu.menu();
 	}
 	
 	private static void comprarProduto() {
-		System.out.println("Comprando produto...");		
+		System.out.println("Comprando produto...");	
+		//
+		//
+		// CONTINUAR DAQUI!!!!
+		//
+		//
 	}
 
 	private static void visualizarCarrinho() {
-		System.out.println("Visualizar carrinho...");		
+		//System.out.println("Visualizar carrinho...");
+		if(MainMenu.carrinho.size() > 0) {
+			System.out.println("Produtos no carrinho: ");
+			
+			for(Produto p : MainMenu.carrinho.keySet()) {
+				System.out.println("Produto: " + p + "\nQuantidade" + MainMenu.carrinho.get(p));
+			}
+		}else {
+			System.out.println("Ainda não há produtos no carrinho!");
+		}
+		
+		Utils.pausar(2);
+		MainMenu.menu();
 	}
 
-
-
-
-
+}
 
 
 	//private static void cadProduct() {
@@ -144,5 +180,4 @@ public class MainMenu {
 		//String retorno = productC.cadProduct(sku, description, qtt, originPrice, salePrice);
 		//System.out.println(retorno);
 		
-	}
-
+	
