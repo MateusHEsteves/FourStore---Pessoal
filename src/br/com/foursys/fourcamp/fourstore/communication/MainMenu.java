@@ -128,12 +128,57 @@ public class MainMenu {
 	}
 	
 	private static void comprarProduto() {
-		System.out.println("Comprando produto...");	
-		//
-		//
-		// CONTINUAR DAQUI!!!!
-		//
-		//
+		//System.out.println("Comprando produto...");	
+		if(MainMenu.produtos.size() > 0) {
+			System.out.println("Informe o código do produto que deseja comprar: ");
+			System.out.println();
+			
+			System.out.println("================= Produtos Disponíveis =================");
+			for(Produto q : MainMenu.produtos) {
+				System.out.println(q);
+				System.out.println("--------------------------------");
+			}
+			int codigo = Integer.parseInt(MainMenu.sc.next());
+			boolean tem = false;
+			
+			for(Produto q : MainMenu.produtos) {
+				if(q.getCodigo() == codigo) {
+					int quant = 0;
+					try {
+						quant = MainMenu.carrinho.get(q);
+						// Já tem esse produto no carrinho, atualiza a quantidade.
+						MainMenu.carrinho.put(q, quant+1); //(q, quant + 1)
+					} catch(NullPointerException e) {
+						// Primeiro produto no carrinho
+						MainMenu.carrinho.put(q, 1);
+					}
+					System.out.println("O produto " + q.getNome() + " foi adicionado ao carrinho.");
+					tem = true;
+				}
+				if(tem) {
+					System.out.println("Deseja adicionar outro pedido no carrinho? ");
+					System.out.println("Infome 1 para SIM, ou 0 para NÃO: ");
+					int op = Integer.parseInt(MainMenu.sc.next());
+					
+					if(op == 1) {
+						MainMenu.comprarProduto();
+					}else {
+						System.out.println("Por favor, aguarde enquanto fechamos seu pedido...");
+						Utils.pausar(2);
+						MainMenu.fecharPedido();
+					}
+				}else {
+					System.out.println("Não foi encontrado o produto com o código " + codigo);
+					Utils.pausar(2);
+					MainMenu.menu();
+					
+				}
+			}
+		} else {
+			System.out.println("Ainda não existe produto cadastrado no mercado.");
+			Utils.pausar(2);
+			MainMenu.menu();
+		}
 	}
 
 	private static void visualizarCarrinho() {
@@ -149,6 +194,24 @@ public class MainMenu {
 		}
 		
 		Utils.pausar(2);
+		MainMenu.menu();
+	}
+	
+	private static void fecharPedido() {
+		Double valorTotal = 0.0;
+		System.out.println("Produtos do carrinho: ");
+		System.out.println("-------------------------");
+		for(Produto p : MainMenu.carrinho.keySet()) {
+			int quant = MainMenu.carrinho.get(p);
+			valorTotal += p.getPreco() * quant;
+			System.out.println(p);
+			System.out.println("Quantidade: " + quant);
+			System.out.println("---------------------");
+		}
+		System.out.println("Sua fatura é " + Utils.doubleParaString(valorTotal));
+		MainMenu.carrinho.clear();
+		System.out.println("Obrigado pela preferência.");
+		Utils.pausar(4);
 		MainMenu.menu();
 	}
 

@@ -34,7 +34,11 @@ public class Produto {
 	public int getCodigo() {
 		return this.codigo;
 	}
-	
+		
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+
 	public String getNome() {
 		return nome;
 	}
