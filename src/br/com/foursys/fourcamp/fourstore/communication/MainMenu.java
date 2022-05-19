@@ -1,12 +1,14 @@
 package br.com.foursys.fourcamp.fourstore.communication;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
 import br.com.foursys.fourcamp.fourstore.controller.ProductController;
 import br.com.foursys.fourcamp.fourstore.helper.Utils;
 import br.com.foursys.fourcamp.fourstore.model.Produto;
+
 
 public class MainMenu {
 	//ProductController productC;
@@ -25,7 +27,7 @@ public class MainMenu {
 	//Começar o MENU de fato;
 	private static void menu() {
 		
-		while(true) {
+		//while(true) {
 			
 			System.out.println("=== Menu Principal ===");
 			System.out.println("Selecione uma opção "
@@ -36,7 +38,17 @@ public class MainMenu {
 					+ "\n 5 - Sair do sistema\n");
 			
 			
-			Integer opcao = sc.nextInt();
+			//Integer opcao = sc.nextInt();
+			
+			int opcao = 0;
+			
+			try {
+				opcao = Integer.parseInt(MainMenu.sc.nextLine());
+			}catch(InputMismatchException e) {
+				MainMenu.menu();
+			}catch(NumberFormatException f) {
+				MainMenu.menu();
+			}
 			
 			switch (opcao) {
 			case 1:
@@ -64,7 +76,6 @@ public class MainMenu {
 			
 		}
 	
-	}
 	
 	private static void cadastrarProduto() {
 		System.out.println("Cadastro de Produto");	
@@ -72,7 +83,7 @@ public class MainMenu {
 		
 		//DEBUGAR = No teste de mesa, só consigo separar as strings por underline, se usar espaço quebra.
 		
-		while (sc != null) {
+		//while (sc != null) {
 		System.out.println("Informe o nome do produto: ");
 		String nome = MainMenu.sc.next();
 		
@@ -104,10 +115,9 @@ public class MainMenu {
 			
 		} 
 		
-		sc.close();
+		//sc.close();
 		
-		
-	}
+	
 	
 	private static void listarProdutos() {
 		//System.out.println("Listando produto...");
@@ -130,35 +140,37 @@ public class MainMenu {
 	private static void comprarProduto() {
 		//System.out.println("Comprando produto...");	
 		if(MainMenu.produtos.size() > 0) {
-			System.out.println("Informe o código do produto que deseja comprar: ");
+			System.out.println("Informe o código do produto que desejar comprar: ");
 			System.out.println();
 			
-			System.out.println("================= Produtos Disponíveis =================");
-			for(Produto q : MainMenu.produtos) {
-				System.out.println(q);
-				System.out.println("--------------------------------");
+			System.out.println("============== Produtos Disponíveis =============");
+			for(Produto p : MainMenu.produtos) {
+				System.out.println(p);
+				System.out.println("------------------------");
 			}
-			int codigo = Integer.parseInt(MainMenu.sc.next());
+			int codigo = Integer.parseInt(MainMenu.sc.nextLine());
 			boolean tem = false;
 			
-			for(Produto q : MainMenu.produtos) {
-				if(q.getCodigo() == codigo) {
+			for(Produto p : MainMenu.produtos) {
+				if(p.getCodigo() == codigo) {
 					int quant = 0;
 					try {
-						quant = MainMenu.carrinho.get(q);
-						// Já tem esse produto no carrinho, atualiza a quantidade.
-						MainMenu.carrinho.put(q, quant+1); //(q, quant + 1)
-					} catch(NullPointerException e) {
+						quant = MainMenu.carrinho.get(p);
+						// Já tem este produto no carrinho, atualiza quantidade
+						MainMenu.carrinho.put(p, quant + 1);
+					}catch(NullPointerException e) {
 						// Primeiro produto no carrinho
-						MainMenu.carrinho.put(q, 1);
+						MainMenu.carrinho.put(p,  1);
 					}
-					System.out.println("O produto " + q.getNome() + " foi adicionado ao carrinho.");
+					
+					System.out.println("O produto " + p.getNome() + " foi adicionado ao carrinho.");
 					tem = true;
+					}
 				}
 				if(tem) {
-					System.out.println("Deseja adicionar outro pedido no carrinho? ");
-					System.out.println("Infome 1 para SIM, ou 0 para NÃO: ");
-					int op = Integer.parseInt(MainMenu.sc.next());
+					System.out.println("Deseja adicionar outros produtos ao carrinho? ");
+					System.out.println("Informe 1 para SIM ou 0 para NÃO: ");
+					int op = Integer.parseInt(MainMenu.sc.nextLine());
 					
 					if(op == 1) {
 						MainMenu.comprarProduto();
@@ -171,10 +183,8 @@ public class MainMenu {
 					System.out.println("Não foi encontrado o produto com o código " + codigo);
 					Utils.pausar(2);
 					MainMenu.menu();
-					
 				}
-			}
-		} else {
+			}else {
 			System.out.println("Ainda não existe produto cadastrado no mercado.");
 			Utils.pausar(2);
 			MainMenu.menu();
